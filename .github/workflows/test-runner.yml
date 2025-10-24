@@ -1,0 +1,57 @@
+name: Test Self-Hosted Runner
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-self-hosted:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Display runner information
+      run: |
+        echo "Runner name: $RUNNER_NAME"
+        echo "Runner OS: $RUNNER_OS"
+        echo "Runner architecture: $RUNNER_ARCH"
+        echo "Workspace: $GITHUB_WORKSPACE"
+
+    - name: Display system information
+      run: |
+        echo "=== System Information ==="
+        uname -a
+        echo ""
+        echo "=== CPU Information ==="
+        sysctl -n machdep.cpu.brand_string
+        echo ""
+        echo "=== Memory Information ==="
+        system_profiler SPHardwareDataType | grep "Memory:"
+        echo ""
+        echo "=== Disk Space ==="
+        df -h /
+
+    - name: Test Python availability
+      run: |
+        echo "=== Python Version ==="
+        python3 --version
+        echo ""
+        echo "=== Pip Version ==="
+        pip3 --version
+
+    - name: Run test script
+      run: |
+        chmod +x ./test.sh
+        ./test.sh
+
+    - name: Success message
+      run: |
+        echo "=========================================="
+        echo "Self-hosted runner test completed!"
+        echo "Runner is working correctly!"
+        echo "=========================================="
