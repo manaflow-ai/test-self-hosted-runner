@@ -18,9 +18,15 @@ The workflow file `.github/workflows/test-runner.yml` runs on every push to main
 4. Run custom test script
 5. Report success
 
-## Manual Trigger
+## Trusted Manual Trigger
 
-You can manually trigger the workflow from the Actions tab in GitHub by clicking "Run workflow".
+The workflow does not run for pull requests. A pull request can change its workflow and
+would otherwise execute that code on the persistent runner. A maintainer may run the
+workflow from the Actions tab with the `main` branch selected. The job rejects every
+other ref, and the checkout uses the selected trusted commit without a write credential.
+
+Do not dispatch this workflow for a pull-request or feature branch. Use a disposable
+hosted runner for untrusted validation instead.
 
 ## What This Tests
 
